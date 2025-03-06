@@ -60,6 +60,41 @@ def determineUserStageAndSubstage(user_id):
 
 
 '''
+Determines the current topic that the user is in.
+
+Parameters:
+    - user_id: The user id of the user, obtained from Telegram API
+
+Returns:
+    - current_topic: Current topic that the user is in
+'''
+def determineUserTopic(user_id):
+    # Connect to the database
+    conn = get_db_connection()
+
+    # Search the users table using user_id and retrieve current topic
+    cursor = conn.cursor()
+    cursor.execute("SELECT current_topic FROM users WHERE user_id = %s", (user_id,))
+
+    # Fetch the result which is a tuple with 1 values corresponding to current topic
+    result = cursor.fetchone()
+
+    # Close the connection
+    conn.close()
+
+    # Check if current topic exists
+    if result:
+        current_topic = result
+        return current_topic
+    else:
+        return None
+
+
+
+
+
+
+'''
 Checks whether the user exists in the users table of the database
 
 Parameters:
@@ -161,6 +196,33 @@ def updateUserStageAndSubstage(user_id, new_stage, new_substage):
     cursor.execute(
         "UPDATE users SET current_stage = %s, current_substage = %s WHERE user_id = %s",
         (new_stage, new_substage, user_id)
+    )
+
+    # Commit the transaction and close the connection
+    conn.commit()
+    conn.close()
+
+
+'''
+Updates the topic of the given user.
+
+Parameters:
+    - user_id: ID of the user whose stage and substage are to be updated
+    - new_topic: New topic of the user
+
+Returns:
+    - No return value
+
+'''
+def updateUserTopic(user_id, new_topic):
+    # Connect to the database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Update the user's topic
+    cursor.execute(
+        "UPDATE users SET current_topic = %s WHERE user_id = %s",
+        (new_topic, user_id)
     )
 
     # Commit the transaction and close the connection

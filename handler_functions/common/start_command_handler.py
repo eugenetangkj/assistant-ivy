@@ -1,9 +1,7 @@
-from prompts import START_COMMAND_MESSAGE, POPE_FRANCIS_AI_IMAGE_PATH, START_COMMAND_ALTERNATIVE_MESSAGE
+from prompts import START_COMMAND_MESSAGE_TOPIC_1, START_COMMAND_MESSAGE_TOPIC_2, START_COMMAND_MESSAGE_TOPIC_3
 from telegram import Update
 from telegram.ext import CallbackContext
-from services.database_manager import check_if_user_exist, add_user, saveMessageToConversationHistory
-from definitions.role import Role
-
+from services.database_manager import check_if_user_exist, add_user, determineUserTopic, updateUserTopic
 
 '''
 Handler function for /start command where it initiates the conversation. It sends
@@ -22,19 +20,23 @@ async def handle_start(update: Update, _: CallbackContext):
     user_name = update.effective_user.first_name
     user_id = update.effective_user.id
 
-    if check_if_user_exist(user_id):
-        # Case 1: User already exist
-        await update.message.reply_text(START_COMMAND_ALTERNATIVE_MESSAGE.format(user_name))
-    else:
-        # Case 2: User does not exist
 
-        # Add the user to the database
+    # Check if the user exists in the database.
+    if not check_if_user_exist(user_id):
+        # User does not exist. Add the user to the database.
         add_user(user_id)
-
-        # Send introduction message
-        introduction_message = START_COMMAND_MESSAGE.format(user_name)
-        await update.message.reply_text(introduction_message)
-        saveMessageToConversationHistory(user_id, Role.SYSTEM, introduction_message, 1, 1)
-
-        # Send the Pope Francis AI-generated image
-        await update.message.reply_photo(photo=POPE_FRANCIS_AI_IMAGE_PATH)
+    
+    # Send the introduction message depending on the current topic of the bot
+    topic, = determineUserTopic(user_id)
+    if topic is None or topic >= 4:
+        # For reason, topic cannot be found or it is an invalid topic. Reset the topic to default topic 1.
+        updateUserTopic(user_id, 1)
+        topic = 1
+    
+    # Send the corresponding introduction messages depending on the current topic
+    start_message = START_COMMAND_MESSAGE_TOPIC_1
+    if topic == 2:
+        start_message = START_COMMAND_MESSAGE_TOPIC_2
+    elif topic == 3:
+        start_message = START_COMMAND_MESSAGE_TOPIC_3    
+    await update.message.reply_text(start_message.format(user_name))

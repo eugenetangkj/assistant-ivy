@@ -3,11 +3,6 @@ from definitions.magic_words import MagicWords
 '''
 COMMON MESSAGES
 '''
-# /delete message
-DELETE_COMMAND_MESSAGE = (
-    "User data and all associated conversation history have been successfully deleted."
-)
-
 # Prompt if user enters free text but cannot find the user's data in the database
 REQUEST_TO_DELETE_MESSAGE = (
     "Sorry, something went wrong. Please type /start to begin again."
@@ -25,10 +20,6 @@ matter-of-fact, and do not use exclamation marks. There is NO NEED to say praise
 '''
 )
 
-# Start command alternative message, if user somehow already exists before sayinng /start
-START_COMMAND_ALTERNATIVE_MESSAGE = (
-    "Hi {}. I am Auntie Irene. I recently attended a class on deepfakes and it is quite interesting. Feel free to ask me anything about deepfakes."
-)
 
 # Audio production error
 AUDIO_PRODUCTION_ERROR = "Sorry, I am not able to produce voice messages at this moment."
@@ -47,6 +38,55 @@ MULTIMEDIA_NOT_SUPPORTED_MESSAGE = "Sorry, I can only accept text and voice mess
 AUDIO_MODE_ENABLED_MESSAGE = "Audio mode is enabled. I will now reply using voice messages."
 AUDIO_MODE_DISABLED_MESSAGE = "Audio mode is disabled. I will now reply with text messages."
 CREATE_USER_FOR_AUDIO_MODE = "Please run `/start` before toggling the audio mode."
+
+
+
+'''
+START command messages
+'''
+# Start message for topic 1
+START_COMMAND_MESSAGE_TOPIC_1 = (
+    "Hi {}. I am Assistant Ivy. I am here to answer your questions about how deepfakes are created. Please feel free to ask me any questions. 😊"
+)
+
+# Start message for topic 2
+START_COMMAND_MESSAGE_TOPIC_2 = (
+    "Hi {}. I am Assistant Ivy. I am here to answer your questions about how to spot deepfakes. Please feel free to ask me any questions. 😊"
+)
+
+# Start message for topic 3
+START_COMMAND_MESSAGE_TOPIC_3 = (
+    "Hi {}. I am Assistant Ivy. I am here to answer your questions about the benefits and harms of deepfakes. Please feel free to ask me any questions. 😊"
+)
+
+
+'''
+DELETE command messages
+'''
+# Delete command message that informs the user that the user data has been deleted from the database
+DELETE_COMMAND_MESSAGE = (
+    "User data and all associated conversation history have been successfully deleted."
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 '''
