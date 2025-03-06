@@ -27,23 +27,22 @@ def get_db_connection():
 
 
 '''
-Determines the current stage and substage that the user is in with regards to the conversational
-flow by reading from the database
+Determines the current topic and stage that the user is in by reading from the database
 
 Parameters:
     - user_id: The user id of the user, obtained from Telegram API
 
 Returns:
-    - current_stage: Current conversational stage that the user is in
-    - current_substage: Current conversational substage that the user is in
+    - current_topic: Current topic selected by the user
+    - current_stage: Current stage in the topic that the user is in
 '''
-def determineUserStageAndSubstage(user_id):
+def determineUserTopicAndStage(user_id):
     # Connect to the database
     conn = get_db_connection()
 
-    # Search the users table using user_id and retrieve current_stage and current_substage
+    # Search the users table using user_id and retrieve current topic and current stage
     cursor = conn.cursor()
-    cursor.execute("SELECT current_stage, current_substage FROM users WHERE user_id = %s", (user_id,))
+    cursor.execute("SELECT current_topic, current_stage FROM users WHERE user_id = %s", (user_id,))
 
     # Fetch the result which is a tuple with 2 values corresponding to current stage and substage
     result = cursor.fetchone()
@@ -51,10 +50,10 @@ def determineUserStageAndSubstage(user_id):
     # Close the connection
     conn.close()
 
-    # Check if current stage and current substage exists
+    # Check if current topic and current stage exists
     if result:
-        current_stage, current_substage = result
-        return current_stage, current_substage
+        current_topic, current_stage = result
+        return current_topic, current_stage
     else:
         return None
 
@@ -235,15 +234,15 @@ Saves a message to the conversation history of the given user
 
 Parameters:
     - user_id : ID of the user to which the message belongs to
-    - role: Role of the user, either 'user' or 'bot'
+    - role: Role of the user, either 'user' or 'system'
     - message: The message to be saved
+    - current_topic: Topic in which the message is sent
     - current_stage: Stage in which the message is sent
-    - current_substage: Substage in which the message is sent
 
 Returns:
     - No return value
 '''
-def saveMessageToConversationHistory(user_id, role: Role, message, current_stage, current_substage):
+def saveMessageToConversationHistory(user_id, role: Role, message, current_topic, current_stage):
     # Connect to the database
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -254,10 +253,10 @@ def saveMessageToConversationHistory(user_id, role: Role, message, current_stage
     # Insert the message into the conversation_history table
     cursor.execute(
         """
-        INSERT INTO conversation_history (user_id, role, message, current_stage, current_substage, datetime)
+        INSERT INTO conversation_history (user_id, role, message, current_topic, current_stage, datetime)
         VALUES (%s, %s, %s, %s, %s, %s)
         """,
-        (user_id, role.value, message, current_stage, current_substage, timestamp)
+        (user_id, role.value, message, current_topic, current_stage, timestamp)
     )
     
     # Commit the transaction and close the connection
@@ -267,20 +266,20 @@ def saveMessageToConversationHistory(user_id, role: Role, message, current_stage
 
 '''
 Retrieves the conversation history of the given user that falls within
-the specified stages (inclusive) sorted in oldest to newest.
+the specified topics and stages (inclusive) sorted in oldest to newest.
 
 Parameters:
     - user_id: ID of the user whose conversation history is to be fetched
-    - current_stage_lower_bound: Lower bound for stages to fetch from
-    - current_substage_lower_bound: Lower bound for stages to fetch from
-    - current_stage_upper_bound: Upper bound for stages to fetch from
-    - current_substage_upper_bound: Upper bound for stages to fetch from
+    - current_topic_lower_bound: Lower bound for topic to fetch from
+    - current_stage_lower_bound: Lower bound for stage to fetch from
+    - current_topic_upper_bound: Upper bound for topic to fetch from
+    - current_stage_upper_bound: Upper bound for stage to fetch from
 
 Returns:
     - A list of messages in the form of (role, message)
 
 '''
-def fetchConversationHistory(user_id, current_stage_lower_bound, current_substage_lower_bound, current_stage_upper_bound, current_substage_upper_bound):
+def fetchConversationHistory(user_id, current_topic_lower_bound, current_stage_lower_bound, current_topic_upper_bound, current_stage_upper_bound):
     # Connect to the database
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -291,15 +290,15 @@ def fetchConversationHistory(user_id, current_stage_lower_bound, current_substag
     FROM conversation_history
     WHERE user_id = %s
       AND (
-          (current_stage = %s AND current_substage >= %s) 
-          OR (current_stage > %s AND current_stage < %s)
-          OR (current_stage = %s AND current_substage <= %s)
+          (current_topic = %s AND current_stage >= %s) 
+          OR (current_topic > %s AND current_stage < %s)
+          OR (current_topic = %s AND current_stage <= %s)
       )
     ORDER BY datetime ASC
     """, (user_id, 
-      current_stage_lower_bound, current_substage_lower_bound,
-      current_stage_lower_bound, current_stage_upper_bound,
-      current_stage_upper_bound, current_substage_upper_bound)
+      current_topic_lower_bound, current_stage_lower_bound,
+      current_topic_lower_bound, current_stage_upper_bound,
+      current_topic_upper_bound, current_stage_upper_bound)
     )
     
     # Fetch all matching rows

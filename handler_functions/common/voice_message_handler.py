@@ -4,7 +4,7 @@ from services.audio_manager import MAX_FILE_SIZE_MB, convert_from_ogg_to_mp3
 from services.openai_manager import get_openai_client
 import os
 from handler_functions.common.freetext_handler import reply_to_user_message
-from prompts import VOICE_MESSAGE_TOO_LARGE_ERROR, VOICE_MESSAGE_FORMAT_CONVERSION_ERROR, VOICE_MESSAGE_TRANSCRIPTION_ERROR
+from prompts.common_prompts import VOICE_MESSAGE_TOO_LARGE_ERROR, VOICE_MESSAGE_FORMAT_CONVERSION_ERROR, VOICE_MESSAGE_TRANSCRIPTION_ERROR
 
 
 '''

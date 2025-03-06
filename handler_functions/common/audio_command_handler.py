@@ -1,4 +1,4 @@
-from prompts import AUDIO_MODE_ENABLED_MESSAGE, AUDIO_MODE_DISABLED_MESSAGE, CREATE_USER_FOR_AUDIO_MODE
+from prompts.common_prompts import AUDIO_MODE_ENABLED_MESSAGE, AUDIO_MODE_DISABLED_MESSAGE, CREATE_USER_FOR_AUDIO_MODE
 from telegram import Update
 from telegram.ext import CallbackContext
 from services.database_manager import check_if_user_exist, determine_is_audio_enabled, set_is_audio_enabled

@@ -1,4 +1,4 @@
-from prompts import START_COMMAND_MESSAGE_TOPIC_1, START_COMMAND_MESSAGE_TOPIC_2, START_COMMAND_MESSAGE_TOPIC_3
+from prompts.common_prompts import START_COMMAND_MESSAGE_TOPIC_1, START_COMMAND_MESSAGE_TOPIC_2, START_COMMAND_MESSAGE_TOPIC_3
 from telegram import Update
 from telegram.ext import CallbackContext
 from services.database_manager import check_if_user_exist, add_user, determineUserTopic, updateUserTopic
