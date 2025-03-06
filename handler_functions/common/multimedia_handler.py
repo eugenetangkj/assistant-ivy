@@ -1,4 +1,4 @@
-from prompts import MULTIMEDIA_NOT_SUPPORTED_MESSAGE
+from prompts.common_prompts import MULTIMEDIA_NOT_SUPPORTED_MESSAGE
 from telegram import Update
 from telegram.ext import CallbackContext
 

@@ -1,4 +1,4 @@
-from prompts import DELETE_COMMAND_MESSAGE
+from prompts.common_prompts import DELETE_COMMAND_MESSAGE
 from services.database_manager import delete_user
 from telegram import Update
 from telegram.ext import CallbackContext
