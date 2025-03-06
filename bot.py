@@ -7,6 +7,7 @@ from handler_functions.common.freetext_handler import handle_free_text
 from handler_functions.common.voice_message_handler import handle_voice_message
 from handler_functions.common.audio_command_handler import handle_audio
 from handler_functions.common.multimedia_handler import handle_multimedia
+from handler_functions.common.topic_command_handler import handle_topic
 
 
 # Load environment variables from the .env file
@@ -27,6 +28,7 @@ def main():
     application.add_handler(CommandHandler("audio", handle_audio))
     application.add_handler(MessageHandler(filters.PHOTO, handle_multimedia))
     application.add_handler(MessageHandler(filters.Document.ALL, handle_multimedia))
+    application.add_handler(CommandHandler("topic", handle_topic))
 
 
     # Start the bot in polling mode where the bot will check Telegram servers every few seconds

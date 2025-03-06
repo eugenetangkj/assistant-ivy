@@ -89,10 +89,6 @@ def determineUserTopic(user_id):
         return None
 
 
-
-
-
-
 '''
 Checks whether the user exists in the users table of the database
 
@@ -175,53 +171,26 @@ def delete_user(user_id):
 
 
 '''
-Updates the stage and substage of the given user.
+Updates the topic and stage of the given user.
 
 Parameters:
-    - user_id: ID of the user whose stage and substage are to be updated
+    - user_id: ID of the user whose topic and stage are to be updated
+    - new_topic: New topic of the user
     - new_stage: New stage of the user
-    - new_substage: New substage of the user
 
 Returns:
     - No return value
 
 '''
-def updateUserStageAndSubstage(user_id, new_stage, new_substage):
+def updateUserTopicAndStage(user_id, new_topic, new_stage):
     # Connect to the database
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Update the user's stage and substage
     cursor.execute(
-        "UPDATE users SET current_stage = %s, current_substage = %s WHERE user_id = %s",
-        (new_stage, new_substage, user_id)
-    )
-
-    # Commit the transaction and close the connection
-    conn.commit()
-    conn.close()
-
-
-'''
-Updates the topic of the given user.
-
-Parameters:
-    - user_id: ID of the user whose stage and substage are to be updated
-    - new_topic: New topic of the user
-
-Returns:
-    - No return value
-
-'''
-def updateUserTopic(user_id, new_topic):
-    # Connect to the database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    # Update the user's topic
-    cursor.execute(
-        "UPDATE users SET current_topic = %s WHERE user_id = %s",
-        (new_topic, user_id)
+        "UPDATE users SET current_topic = %s, current_stage = %s WHERE user_id = %s",
+        (new_topic, new_stage, user_id)
     )
 
     # Commit the transaction and close the connection

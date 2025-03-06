@@ -1,13 +1,11 @@
 from prompts.common_prompts import START_COMMAND_MESSAGE_TOPIC_1, START_COMMAND_MESSAGE_TOPIC_2, START_COMMAND_MESSAGE_TOPIC_3
 from telegram import Update
 from telegram.ext import CallbackContext
-from services.database_manager import check_if_user_exist, add_user, determineUserTopic, updateUserTopic
+from services.database_manager import check_if_user_exist, add_user, determineUserTopic, updateUserTopicAndStage
 
 '''
-Handler function for /start command where it initiates the conversation. It sends
-the introduction message and an AI-generated image of Pope Francis if the user does not
-exist in the database, else it generates a basic message asking the user if he has any
-questions about deepfakes.
+Handler function for /start command where it initiates the conversation, informing
+the user what it can do.
 
 Parameters:
     - update: Update frame from Telegram
@@ -29,8 +27,8 @@ async def handle_start(update: Update, _: CallbackContext):
     # Send the introduction message depending on the current topic of the bot
     topic, = determineUserTopic(user_id)
     if topic is None or topic >= 4:
-        # For reason, topic cannot be found or it is an invalid topic. Reset the topic to default topic 1.
-        updateUserTopic(user_id, 1)
+        # For reason, topic cannot be found or it is an invalid topic. Reset the topic to default topic 1 and stage 1
+        updateUserTopicAndStage(1, 1)
         topic = 1
     
     # Send the corresponding introduction messages depending on the current topic
