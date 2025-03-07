@@ -4,6 +4,7 @@ from telegram.ext import CallbackContext
 from services.database_manager import determineUserTopicAndStage, saveMessageToConversationHistory
 from definitions.role import Role
 from handler_functions.topic_1.topic_one_stage_one import handle_topic_one_stage_one
+from handler_functions.topic_2.topic_two_stage_one import handle_topic_two_stage_one
 
 
 '''
@@ -49,5 +50,9 @@ async def reply_to_user_message(update: Update, user_id: int, user_message: str)
         # TOPIC 1: How is a deepfake created
         saveMessageToConversationHistory(user_id, Role.USER, user_message, current_topic, current_stage)
         await handle_topic_one_stage_one(user_id, update)
+    elif (current_topic == 2):
+        # TOPIC 2: How to spot a deepfake
+        saveMessageToConversationHistory(user_id, Role.USER, user_message, current_topic, current_stage)
+        await handle_topic_two_stage_one(user_id, update)
     else:
         await update.message.reply_text("We are still constructing this part of the conversational flow.")
