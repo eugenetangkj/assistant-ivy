@@ -13,9 +13,11 @@ him to ask questions about how deepfakes are created instead.
 '''
 )
 
+TOPIC_1_STAGE_1_GOAL_PROMPT = (
+'''
+Your goal is to explain to the senior on how deepfakes are created.
+'''
+)
 
-TOPIC_1_STAGE_1_PROMPT = PERSONA_PROMPT + "\n" + (
-    '''
-    Prompt here
-    '''
-) + "\n" + TOPIC_1_STAGE_1_CONSTRAINTS_PROMPT
+
+TOPIC_1_STAGE_1_PROMPT = PERSONA_PROMPT + "\n" + TOPIC_1_STAGE_1_GOAL_PROMPT + "\n" + TOPIC_1_STAGE_1_CONSTRAINTS_PROMPT
