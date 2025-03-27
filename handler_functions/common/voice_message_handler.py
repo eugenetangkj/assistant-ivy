@@ -54,7 +54,8 @@ async def handle_voice_message(update: Update, _: CallbackContext):
         transcribed_message = client.audio.transcriptions.create(
             model="whisper-1",
             file=audio_file,
-            response_format="text"
+            response_format="text",
+            language="en"
         )
 
         # Let the bot process the user's message
